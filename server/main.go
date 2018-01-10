@@ -1,11 +1,13 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
 
+	"golang.org/x/net/context"
+
 	"github.com/novatrixtech/tonecoin/proto"
+	"github.com/novatrixtech/tonecoin/server/blockchain"
 	"google.golang.org/grpc"
 )
 
@@ -16,18 +18,25 @@ func main() {
 	}
 
 	srv := grpc.NewServer()
-	proto.RegisterBlockchainServer(srv, &Server{})
-	srv.Serve(listener)
+	proto.RegisterBlockchainServer(srv, &Server{
+		Blockchain: blockchain.NewBlockchain(),
+	})
 	log.Println("Blockchain server listening at 8097...")
+	srv.Serve(listener)
 }
 
 //Server represents the implementation of BlockchainServer (gRPC) Server
-type Server struct{}
+type Server struct {
+	Blockchain *blockchain.Blockchain
+}
 
 //AddBlock represents the implementation of AddBlock method of BlockchainServer interface
 func (s *Server) AddBlock(ctx context.Context, abReq *proto.AddBlockRequest) (abResp *proto.AddBlockResponse, err error) {
 	err = nil
-	abResp = new(proto.AddBlockResponse)
+	block := s.Blockchain.AddBlock(abReq.Data)
+	abResp = &proto.AddBlockResponse{
+		Hash: block.Hash,
+	}
 	return
 }
 
@@ -35,5 +44,12 @@ func (s *Server) AddBlock(ctx context.Context, abReq *proto.AddBlockRequest) (ab
 func (s *Server) GetBlockchain(ctx context.Context, req *proto.GetBlockchainRequest) (resp *proto.GetBlockchainResponse, err error) {
 	err = nil
 	resp = new(proto.GetBlockchainResponse)
+	for _, b := range s.Blockchain.Blocks {
+		resp.Blocks = append(resp.Blocks, &proto.Block{
+			PrevBlockHash: b.PrevBlockHash,
+			Hash:          b.Hash,
+			Data:          b.Data.(string),
+		})
+	}
 	return
 }
