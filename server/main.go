@@ -33,16 +33,19 @@ type Server struct {
 //AddBlock represents the implementation of AddBlock method of BlockchainServer interface
 func (s *Server) AddBlock(ctx context.Context, abReq *proto.AddBlockRequest) (abResp *proto.AddBlockResponse, err error) {
 	err = nil
+	log.Println("[AddBlock] Adding Block...")
 	block := s.Blockchain.AddBlock(abReq.Data)
 	abResp = &proto.AddBlockResponse{
 		Hash: block.Hash,
 	}
+	log.Println("[AddBlock] Block added...")
 	return
 }
 
 //GetBlockchain represents the implementation of GetBlockchain method of BlockchainServer interface
 func (s *Server) GetBlockchain(ctx context.Context, req *proto.GetBlockchainRequest) (resp *proto.GetBlockchainResponse, err error) {
 	err = nil
+	log.Println("[GetBlockchain] Getting Block list...")
 	resp = new(proto.GetBlockchainResponse)
 	for _, b := range s.Blockchain.Blocks {
 		resp.Blocks = append(resp.Blocks, &proto.Block{
@@ -51,5 +54,6 @@ func (s *Server) GetBlockchain(ctx context.Context, req *proto.GetBlockchainRequ
 			Data:          b.Data.(string),
 		})
 	}
+	log.Println("[GetBlockchain] Returning Block list...")
 	return
 }

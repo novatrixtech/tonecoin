@@ -18,7 +18,7 @@ func main() {
 	listFlag := flag.Bool("list", false, "get the blockchain")
 	flag.Parse()
 
-	conn, err := grpc.Dial("localhost:8097", grpc.WithInsecure())
+	conn, err := grpc.Dial("192.168.0.104:8097", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Cannot connect to the server. Error: %s\n", err.Error())
 	}
