@@ -51,6 +51,6 @@ func listBlockchain() {
 	}
 	log.Println("Blocks: ")
 	for _, b := range bc.Blocks {
-		log.Printf("Timestamp: %s - Hash: %s - Previous hash: %s - Data: %+v\n", b.Timestamp, b.Hash, b.PrevBlockHash, b.Data)
+		log.Printf("Timestamp: %d - Hash: %s - Previous hash: %s - Data: %+v\n", b.Timestamp, b.Hash, b.PrevBlockHash, b.Data)
 	}
 }

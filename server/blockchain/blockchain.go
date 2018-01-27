@@ -3,6 +3,7 @@ package blockchain
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"log"
 	"strconv"
 	"time"
 )
@@ -41,6 +42,7 @@ func NewBlock(data interface{}, previousBlock string) (block *Block) {
 		PrevBlockHash: previousBlock,
 	}
 	block.setHash()
+	log.Printf("Block criado é: %+v \r\n", block)
 	return
 }
 

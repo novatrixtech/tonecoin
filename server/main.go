@@ -52,6 +52,7 @@ func (s *Server) GetBlockchain(ctx context.Context, req *proto.GetBlockchainRequ
 			PrevBlockHash: b.PrevBlockHash,
 			Hash:          b.Hash,
 			Data:          b.Data.(string),
+			Timestamp:     b.Timestamp,
 		})
 	}
 	log.Println("[GetBlockchain] Returning Block list...")
