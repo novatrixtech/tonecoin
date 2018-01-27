@@ -18,7 +18,7 @@ func main() {
 	listFlag := flag.Bool("list", false, "get the blockchain")
 	flag.Parse()
 
-	conn, err := grpc.Dial("192.168.0.104:8097", grpc.WithInsecure())
+	conn, err := grpc.Dial(":8097", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Cannot connect to the server. Error: %s\n", err.Error())
 	}
@@ -51,6 +51,6 @@ func listBlockchain() {
 	}
 	log.Println("Blocks: ")
 	for _, b := range bc.Blocks {
-		log.Printf("Hash: %s - Previous hash: %s - Data: %+v\n", b.Hash, b.PrevBlockHash, b.Data)
+		log.Printf("Timestamp: %s - Hash: %s - Previous hash: %s - Data: %+v\n", b.Timestamp, b.Hash, b.PrevBlockHash, b.Data)
 	}
 }

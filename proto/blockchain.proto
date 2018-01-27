@@ -19,6 +19,7 @@ message Block {
     string hash = 1;
     string prevBlockHash = 2;
     string data = 3;
+    string timestamp = 4;
 }
 message GetBlockchainRequest {}
 

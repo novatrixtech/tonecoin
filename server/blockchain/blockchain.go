@@ -3,17 +3,20 @@ package blockchain
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"strconv"
+	"time"
 )
 
 //Block represents an element within our Blockchain
 type Block struct {
+	Timestamp     int64
 	Hash          string
 	PrevBlockHash string
 	Data          interface{}
 }
 
 func (b *Block) setHash() {
-	hash := sha256.Sum256([]byte(b.PrevBlockHash + b.Data.(string)))
+	hash := sha256.Sum256([]byte(b.PrevBlockHash + b.Data.(string) + strconv.Itoa(int(b.Timestamp))))
 	b.Hash = hex.EncodeToString(hash[:])
 }
 
@@ -33,6 +36,7 @@ func (bc *Blockchain) AddBlock(data interface{}) (newBlock *Block) {
 //NewBlock inserts a new block into our Blockchain
 func NewBlock(data interface{}, previousBlock string) (block *Block) {
 	block = &Block{
+		Timestamp:     time.Now().Unix(),
 		Data:          data,
 		PrevBlockHash: previousBlock,
 	}

@@ -25,7 +25,7 @@
 		},
 		{
 			"ImportPath": "github.com/novatrixtech/tonecoin/proto",
-			"Rev": "94e373afa75c1707995c8758ab2b4629b72c2b51"
+			"Rev": "08e3b600b1b801203e95d35dd2fbbb17f7179c0a"
 		},
 		{
 			"ImportPath": "golang.org/x/net/context",
