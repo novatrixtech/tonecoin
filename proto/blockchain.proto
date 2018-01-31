@@ -7,8 +7,14 @@ service Blockchain {
     rpc GetBlockchain(GetBlockchainRequest) returns (GetBlockchainResponse) {}
 }
 
+enum Datatype {
+    TEXT = 0;
+    TRANSACTION = 1;
+}
+
 message AddBlockRequest {
     string data = 1;
+    Datatype datatype = 2;
 }
 
 message AddBlockResponse {
@@ -20,6 +26,8 @@ message Block {
     string prevBlockHash = 2;
     string data = 3;
     int64 timestamp = 4;
+    Datatype datatype = 5;
+
 }
 message GetBlockchainRequest {}
 
