@@ -20,6 +20,11 @@ import proto1 "github.com/golang/protobuf/proto"
 import fmt "fmt"
 import math "math"
 
+import (
+	context "golang.org/x/net/context"
+	grpc "google.golang.org/grpc"
+)
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto1.Marshal
 var _ = fmt.Errorf
@@ -171,6 +176,111 @@ func init() {
 	proto1.RegisterType((*GetBlockchainRequest)(nil), "proto.GetBlockchainRequest")
 	proto1.RegisterType((*GetBlockchainResponse)(nil), "proto.GetBlockchainResponse")
 	proto1.RegisterEnum("proto.Datatype", Datatype_name, Datatype_value)
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// Client API for Blockchain service
+
+type BlockchainClient interface {
+	AddBlock(ctx context.Context, in *AddBlockRequest, opts ...grpc.CallOption) (*AddBlockResponse, error)
+	GetBlockchain(ctx context.Context, in *GetBlockchainRequest, opts ...grpc.CallOption) (*GetBlockchainResponse, error)
+}
+
+type blockchainClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewBlockchainClient(cc *grpc.ClientConn) BlockchainClient {
+	return &blockchainClient{cc}
+}
+
+func (c *blockchainClient) AddBlock(ctx context.Context, in *AddBlockRequest, opts ...grpc.CallOption) (*AddBlockResponse, error) {
+	out := new(AddBlockResponse)
+	err := grpc.Invoke(ctx, "/proto.Blockchain/AddBlock", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *blockchainClient) GetBlockchain(ctx context.Context, in *GetBlockchainRequest, opts ...grpc.CallOption) (*GetBlockchainResponse, error) {
+	out := new(GetBlockchainResponse)
+	err := grpc.Invoke(ctx, "/proto.Blockchain/GetBlockchain", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Server API for Blockchain service
+
+type BlockchainServer interface {
+	AddBlock(context.Context, *AddBlockRequest) (*AddBlockResponse, error)
+	GetBlockchain(context.Context, *GetBlockchainRequest) (*GetBlockchainResponse, error)
+}
+
+func RegisterBlockchainServer(s *grpc.Server, srv BlockchainServer) {
+	s.RegisterService(&_Blockchain_serviceDesc, srv)
+}
+
+func _Blockchain_AddBlock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddBlockRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BlockchainServer).AddBlock(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.Blockchain/AddBlock",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BlockchainServer).AddBlock(ctx, req.(*AddBlockRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Blockchain_GetBlockchain_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBlockchainRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BlockchainServer).GetBlockchain(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.Blockchain/GetBlockchain",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BlockchainServer).GetBlockchain(ctx, req.(*GetBlockchainRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Blockchain_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "proto.Blockchain",
+	HandlerType: (*BlockchainServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AddBlock",
+			Handler:    _Blockchain_AddBlock_Handler,
+		},
+		{
+			MethodName: "GetBlockchain",
+			Handler:    _Blockchain_GetBlockchain_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "blockchain.proto",
 }
 
 func init() { proto1.RegisterFile("blockchain.proto", fileDescriptor0) }

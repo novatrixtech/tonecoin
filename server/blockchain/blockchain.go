@@ -6,6 +6,8 @@ import (
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/novatrixtech/tonecoin/proto"
 )
 
 //Block represents an element within our Blockchain
@@ -14,6 +16,7 @@ type Block struct {
 	Hash          string
 	PrevBlockHash string
 	Data          interface{}
+	Datatype      proto.Datatype
 }
 
 func (b *Block) setHash() {
@@ -27,19 +30,20 @@ type Blockchain struct {
 }
 
 //AddBlock Add a new block data to blockchain
-func (bc *Blockchain) AddBlock(data interface{}) (newBlock *Block) {
+func (bc *Blockchain) AddBlock(data interface{}, datatype proto.Datatype) (newBlock *Block) {
 	prevBlock := bc.Blocks[len(bc.Blocks)-1]
-	newBlock = NewBlock(data, prevBlock.Hash)
+	newBlock = NewBlock(data, datatype, prevBlock.Hash)
 	bc.Blocks = append(bc.Blocks, newBlock)
 	return
 }
 
 //NewBlock inserts a new block into our Blockchain
-func NewBlock(data interface{}, previousBlock string) (block *Block) {
+func NewBlock(data interface{}, datatype proto.Datatype, previousBlock string) (block *Block) {
 	block = &Block{
 		Timestamp:     time.Now().Unix(),
 		Data:          data,
 		PrevBlockHash: previousBlock,
+		Datatype:      datatype,
 	}
 	block.setHash()
 	log.Printf("Block criado é: %+v \r\n", block)
@@ -48,7 +52,7 @@ func NewBlock(data interface{}, previousBlock string) (block *Block) {
 
 //GenesisBlock creates the first block
 func GenesisBlock() (bigBangBlock *Block) {
-	return NewBlock("Big Bang! World was created!", "")
+	return NewBlock("Big Bang! World was created!", proto.Datatype_TEXT, "")
 }
 
 //NewBlockchain creates the blockchain
