@@ -36,7 +36,8 @@ func main() {
 
 func addBlock() {
 	block, err := client.AddBlock(context.Background(), &proto.AddBlockRequest{
-		Data: time.Now().String(),
+		Data:     time.Now().String(),
+		Datatype: proto.Datatype_TEXT,
 	})
 	if err != nil {
 		log.Fatalf("Unable to add block. Error: %s\n", err.Error())
@@ -51,6 +52,6 @@ func listBlockchain() {
 	}
 	log.Println("Blocks: ")
 	for _, b := range bc.Blocks {
-		log.Printf("Timestamp: %d - Hash: %s - Previous hash: %s - Data: %+v\n", b.Timestamp, b.Hash, b.PrevBlockHash, b.Data)
+		log.Printf("Timestamp: %d - Hash: %s - Previous hash: %s - Datatype: %+v - Data: %+v\n", b.Timestamp, b.Hash, b.PrevBlockHash, b.Datatype, b.Data)
 	}
 }
